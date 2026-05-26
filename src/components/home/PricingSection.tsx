@@ -3,13 +3,36 @@ import { Check, Lock, Smartphone, Mic, RefreshCw, ChevronRight } from "lucide-re
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 
-const plans = [
+// ─── Tipos ────────────────────────────────────────────────────────────────────
+
+interface Plan {
+  id:          string;
+  name:        string;
+  price:       string;
+  tagline:     string;
+  description: string;
+  features:    readonly string[];
+  microcopy:   string;
+  buttonText:  string;
+  popular:     boolean;
+  premium:     boolean;
+}
+
+interface MicroFeature {
+  Icon: React.ElementType;
+  text: string;
+}
+
+// ─── Dados ────────────────────────────────────────────────────────────────────
+
+const PLANS: Plan[] = [
   {
-    id: "comecar",
-    name: "COMEÇAR",
-    price: "29",
-    tagline: "Pra testar sem medo",
+    id:          "comecar",
+    name:        "COMEÇAR",
+    price:       "29",
+    tagline:     "Pra testar sem medo",
     description: "Ideal pra quem quer sentir como funciona, sem compromisso.",
     features: [
       "1 agente à sua escolha",
@@ -17,16 +40,16 @@ const plans = [
       "Funciona com áudio e texto",
       "Comece em poucos minutos",
     ],
-    microcopy: "Sem contrato. Cancele quando quiser.",
+    microcopy:  "Sem contrato. Cancele quando quiser.",
     buttonText: "Quero começar",
-    popular: false,
-    premium: false,
+    popular:    false,
+    premium:    false,
   },
   {
-    id: "trabalhar",
-    name: "TRABALHAR",
-    price: "49",
-    tagline: "Pra usar no dia a dia",
+    id:          "trabalhar",
+    name:        "TRABALHAR",
+    price:       "49",
+    tagline:     "Pra usar no dia a dia",
     description: "O básico bem feito pra tocar a prestação de serviços.",
     features: [
       "Até 2 agentes à sua escolha",
@@ -34,16 +57,16 @@ const plans = [
       "Atendimento, orçamento ou agenda",
       "Suporte por mensagem",
     ],
-    microcopy: "O plano mais usado por quem trabalha sozinho.",
+    microcopy:  "O plano mais usado por quem trabalha sozinho.",
     buttonText: "Usar no dia a dia",
-    popular: false,
-    premium: false,
+    popular:    false,
+    premium:    false,
   },
   {
-    id: "vender-mais",
-    name: "VENDER MAIS",
-    price: "79",
-    tagline: "Pra ganhar tempo e fechar mais serviço",
+    id:          "vender-mais",
+    name:        "VENDER MAIS",
+    price:       "79",
+    tagline:     "Pra ganhar tempo e fechar mais serviço",
     description: "Tudo o que o prestador de serviço precisa pra vender melhor.",
     features: [
       "Todos os agentes inclusos",
@@ -51,16 +74,16 @@ const plans = [
       "Tudo resolvido pelo WhatsApp",
       "Suporte prioritário",
     ],
-    microcopy: "Economiza tempo todos os dias.",
+    microcopy:  "Economiza tempo todos os dias.",
     buttonText: "Quero vender mais",
-    popular: true,
-    premium: false,
+    popular:    true,
+    premium:    false,
   },
   {
-    id: "tudo-automatico",
-    name: "TUDO AUTOMÁTICO",
-    price: "129",
-    tagline: "Pra deixar a prestação de serviços rodando sozinha",
+    id:          "tudo-automatico",
+    name:        "TUDO AUTOMÁTICO",
+    price:       "129",
+    tagline:     "Pra deixar a prestação de serviços rodando sozinha",
     description: "Os agentes trabalham juntos, do cliente ao lucro.",
     features: [
       "Todos os agentes integrados",
@@ -69,118 +92,157 @@ const plans = [
       "Suporte VIP",
       "Novidades primeiro",
     ],
-    microcopy: "Ideal pra quem quer crescer sem virar refém do WhatsApp.",
+    microcopy:  "Ideal pra quem quer crescer sem virar refém do WhatsApp.",
     buttonText: "Quero tudo automático",
-    popular: false,
-    premium: true,
+    popular:    false,
+    premium:    true,
   },
-];
+] as const;
 
-const microFeatures = [
-  { icon: Lock, text: "Sem fidelidade" },
-  { icon: Smartphone, text: "Tudo funciona no WhatsApp" },
-  { icon: Mic, text: "Aceita áudio e texto" },
-  { icon: RefreshCw, text: "Troque de plano quando quiser" },
-];
+const MICRO_FEATURES: MicroFeature[] = [
+  { Icon: Lock,       text: "Sem fidelidade"             },
+  { Icon: Smartphone, text: "Tudo funciona no WhatsApp"  },
+  { Icon: Mic,        text: "Aceita áudio e texto"        },
+  { Icon: RefreshCw,  text: "Troque de plano quando quiser" },
+] as const;
 
+// ─── Componente ───────────────────────────────────────────────────────────────
+
+/**
+ * PricingSection — 4 planos de preço com badge "Recomendado" e CTAs para o carrinho.
+ */
 export function PricingSection() {
   return (
-    <section className="py-20 md:py-28 bg-background">
+    <section className="py-20 md:py-28 bg-background" aria-labelledby="pricing-heading">
       <div className="container">
-        <div className="max-w-3xl mx-auto text-center mb-12 md:mb-16">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-medium text-foreground mb-4 tracking-tight">
+
+        {/* Cabeçalho */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="max-w-3xl mx-auto text-center mb-12 md:mb-16"
+        >
+          <h2
+            id="pricing-heading"
+            className="text-2xl md:text-3xl lg:text-4xl font-medium text-foreground mb-4 tracking-tight"
+          >
             Escolha seu plano
           </h2>
           <p className="text-lg text-muted-foreground">
             Sem contrato. Sem complicação. Cancele quando quiser.
           </p>
-        </div>
+        </motion.div>
 
+        {/* Grid de planos */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto mb-10">
-          {plans.map((plan, index) => {
+          {PLANS.map((plan, index) => {
             const isHighlighted = plan.popular || plan.premium;
-            const highlightColor = plan.popular ? "whatsapp" : plan.premium ? "agent-orange" : "";
-            
+
             return (
-              <Card
-                key={index}
-                className={cn(
-                  "relative overflow-hidden flex flex-col rounded-3xl brutalist-box brutalist-hover-lg",
-                  isHighlighted && plan.popular && "lg:scale-105"
-                )}
+              <motion.div
+                key={plan.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.08 }}
               >
-                {plan.popular && (
-                  <div className="absolute top-0 right-0 text-xs font-semibold px-3 py-1.5 rounded-bl-lg bg-whatsapp text-foreground">
-                    ⭐ Recomendado
-                  </div>
-                )}
-                {plan.premium && (
-                  <div className="absolute top-0 right-0 text-xs font-semibold px-3 py-1.5 rounded-bl-lg bg-agent-orange text-foreground">
-                    ✨ Ideal
-                  </div>
-                )}
-                <CardHeader className="text-center pb-2 pt-6">
-                  <CardTitle className="text-lg md:text-xl text-foreground">
-                    {plan.name}
-                  </CardTitle>
-                  <p className="text-xs font-semibold text-muted-foreground">{plan.tagline}</p>
-                  <p className="text-sm text-muted-foreground mt-2">{plan.description}</p>
-                </CardHeader>
-                <CardContent className="text-center flex-1 flex flex-col pt-4">
-                  <div className="mb-6">
-                    <span className="text-4xl md:text-5xl font-bold text-foreground">
-                      R${plan.price}
-                    </span>
-                    <span className="text-muted-foreground">/mês</span>
-                  </div>
-                  <ul className="space-y-3 mb-6 text-left flex-1">
-                    {plan.features.map((feature, i) => (
-                      <li key={i} className="flex items-start gap-3">
-                        <Check className="w-5 h-5 flex-shrink-0 mt-0.5 text-whatsapp" />
-                        <span className="text-sm text-muted-foreground">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  
-                  {/* Microcopy */}
-                  <p className="text-xs text-muted-foreground mb-4 italic">
-                    {plan.microcopy}
-                  </p>
-                  
-                  <Link to="/carrinho" className="mt-auto">
-                    <Button
-                      className="w-full gap-2"
-                    >
-                      {plan.buttonText}
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
+                <Card
+                  className={cn(
+                    "relative overflow-hidden flex flex-col rounded-3xl brutalist-box brutalist-hover-lg h-full",
+                    isHighlighted && plan.popular && "lg:scale-105"
+                  )}
+                >
+                  {/* Badge de destaque */}
+                  {plan.popular && (
+                    <div className="absolute top-0 right-0 text-xs font-semibold px-3 py-1.5 rounded-bl-lg bg-whatsapp text-foreground">
+                      ⭐ Recomendado
+                    </div>
+                  )}
+                  {plan.premium && (
+                    <div className="absolute top-0 right-0 text-xs font-semibold px-3 py-1.5 rounded-bl-lg bg-agent-orange text-foreground">
+                      ✨ Ideal
+                    </div>
+                  )}
+
+                  <CardHeader className="text-center pb-2 pt-6">
+                    <CardTitle className="text-lg md:text-xl text-foreground">
+                      {plan.name}
+                    </CardTitle>
+                    <p className="text-xs font-semibold text-muted-foreground">{plan.tagline}</p>
+                    <p className="text-sm text-muted-foreground mt-2">{plan.description}</p>
+                  </CardHeader>
+
+                  <CardContent className="text-center flex-1 flex flex-col pt-4">
+                    {/* Preço */}
+                    <div className="mb-6">
+                      <span className="text-4xl md:text-5xl font-bold text-foreground">
+                        R${plan.price}
+                      </span>
+                      <span className="text-muted-foreground">/mês</span>
+                    </div>
+
+                    {/* Lista de features */}
+                    <ul className="space-y-3 mb-6 text-left flex-1">
+                      {plan.features.map((feature, i) => (
+                        <li key={i} className="flex items-start gap-3">
+                          <Check
+                            className="w-5 h-5 flex-shrink-0 mt-0.5 text-whatsapp"
+                            aria-hidden="true"
+                          />
+                          <span className="text-sm text-muted-foreground">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    {/* Microcopy */}
+                    <p className="text-xs text-muted-foreground mb-4 italic">
+                      {plan.microcopy}
+                    </p>
+
+                    <Link to="/carrinho" className="mt-auto">
+                      <Button className="w-full gap-2">
+                        {plan.buttonText}
+                      </Button>
+                    </Link>
+                  </CardContent>
+                </Card>
+              </motion.div>
             );
           })}
         </div>
 
-        {/* Micro features row */}
-        <div className="flex flex-wrap justify-center gap-4 md:gap-8 mb-12 max-w-4xl mx-auto">
-          {microFeatures.map((feature, index) => (
-            <div key={index} className="flex items-center gap-2 text-sm text-muted-foreground">
-              <feature.icon className="w-4 h-4 text-whatsapp" />
-              <span>{feature.text}</span>
+        {/* Micro-features de confiança */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="flex flex-wrap justify-center gap-4 md:gap-8 mb-12 max-w-4xl mx-auto"
+        >
+          {MICRO_FEATURES.map(({ Icon, text }) => (
+            <div key={text} className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Icon className="w-4 h-4 text-whatsapp" aria-hidden="true" />
+              <span>{text}</span>
             </div>
           ))}
-        </div>
+        </motion.div>
 
-        {/* Comparison text */}
-        <div className="text-center max-w-2xl mx-auto mb-10 p-6 rounded-2xl bg-muted/30">
+        {/* Comparação de valor */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center max-w-2xl mx-auto mb-10 p-6 rounded-2xl bg-muted/30"
+        >
           <p className="text-lg font-medium text-foreground mb-2">
             Quanto custa perder um orçamento por demora?
           </p>
           <p className="text-muted-foreground">
             O MandaUmZap custa menos que um café por dia.
           </p>
-        </div>
+        </motion.div>
 
-        {/* CTA to Agents */}
+        {/* CTA para agentes */}
         <div className="text-center">
           <p className="text-muted-foreground mb-4">
             Quer conhecer os agentes antes de decidir?
@@ -188,10 +250,11 @@ export function PricingSection() {
           <Link to="/agentes">
             <Button variant="outline" className="gap-2">
               Ver todos os agentes
-              <ChevronRight className="w-4 h-4" />
+              <ChevronRight className="w-4 h-4" aria-hidden="true" />
             </Button>
           </Link>
         </div>
+
       </div>
     </section>
   );
