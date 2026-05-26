@@ -1,26 +1,34 @@
-import { LandingHeader } from "@/components/landing/Header";
-import { HeroSection } from "@/components/landing/HeroSection";
-import { HowItWorksSection } from "@/components/landing/HowItWorksSection";
-import { AgentsSection } from "@/components/landing/AgentsSection";
-import { PricingSection } from "@/components/landing/PricingSection";
-import { FAQSection } from "@/components/landing/FAQSection";
-import { CTASection } from "@/components/landing/CTASection";
-import { LandingFooter } from "@/components/landing/LandingFooter";
+import {
+  HeroSection,
+  HowItWorksSection,
+  PainSolutionSection,
+  ConceptSection,
+  AgentShowcaseSection,
+  AdvantagesSection,
+  NumbersSection,
+  PricingSection,
+  TestimonialsSection,
+  CasesSection,
+  FAQSection,
+  BlogSection,
+} from "@/components/home";
 
 const Index = () => {
   return (
-    <div className="min-h-screen">
-      <LandingHeader />
-      <main>
-        <HeroSection />
-        <HowItWorksSection />
-        <AgentsSection />
-        <PricingSection />
-        <FAQSection />
-        <CTASection />
-      </main>
-      <LandingFooter />
-    </div>
+    <main className="flex-1">
+      <HeroSection />
+      <HowItWorksSection />
+      <PainSolutionSection />
+      <ConceptSection />
+      <AgentShowcaseSection />
+      <AdvantagesSection />
+      <NumbersSection />
+      <PricingSection />
+      <TestimonialsSection />
+      <CasesSection />
+      <FAQSection />
+      <BlogSection />
+    </main>
   );
 };
 
