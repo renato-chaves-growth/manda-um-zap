@@ -23,12 +23,11 @@ interface AgentColor {
 }
 
 interface ChatMessage {
-  id:      number;
-  type:    "sent" | "received";
+  id:     number;
+  type:   "sent" | "received";
   content: string;
-  time:    string;
-  audio?:  boolean;
-  agent?:  string;
+  time:   string;
+  audio?: boolean;
 }
 
 interface Agent {
@@ -38,8 +37,7 @@ interface Agent {
   tabLabel:    string;
   tagline:     string;
   superpower:  string;
-  avatar:      string | null;
-  isJornada?:  true;
+  avatar:      string;
   socialProof: string;
   stat:        { value: string; label: string };
   features:    readonly string[];
@@ -50,12 +48,11 @@ interface Agent {
 // ─── Cores por agente ─────────────────────────────────────────────────────────
 
 const AGENT_COLORS: Record<string, AgentColor> = {
-  clara:   { primary: "#1DB954", text: "text-[#1DB954]", bg: "bg-[#1DB954]"  },
-  otavio:  { primary: "#0D9488", text: "text-[#0D9488]", bg: "bg-[#0D9488]"  },
-  lucas:   { primary: "#84CC16", text: "text-[#84CC16]", bg: "bg-[#84CC16]"  },
-  helena:  { primary: "#059669", text: "text-[#059669]", bg: "bg-[#059669]"  },
-  maya:    { primary: "#65A30D", text: "text-[#65A30D]", bg: "bg-[#65A30D]"  },
-  jornada: { primary: "#F59E0B", text: "text-[#F59E0B]", bg: "bg-[#F59E0B]"  },
+  clara:  { primary: "#1DB954", text: "text-[#1DB954]", bg: "bg-[#1DB954]" },
+  otavio: { primary: "#0D9488", text: "text-[#0D9488]", bg: "bg-[#0D9488]" },
+  lucas:  { primary: "#84CC16", text: "text-[#84CC16]", bg: "bg-[#84CC16]" },
+  helena: { primary: "#059669", text: "text-[#059669]", bg: "bg-[#059669]" },
+  maya:   { primary: "#65A30D", text: "text-[#65A30D]", bg: "bg-[#65A30D]" },
 } as const;
 
 // ─── Alturas estáticas da forma de onda (evita Math.random no render) ─────────
@@ -190,48 +187,22 @@ const AGENTS: Agent[] = [
       { id: 3, type: "sent",     content: "[Foto da instalação finalizada]", time: "16:02" },
     ],
   },
-  {
-    id:          "jornada",
-    name:        "Jornada do Prestador",
-    role:        "5 assistentes trabalhando juntos",
-    tabLabel:    "Jornada",
-    tagline:     "Do primeiro contato ao lucro — tudo automático.",
-    superpower:  "5 assistentes. Zero férias. Seu negócio nunca para.",
-    avatar:      null,
-    isJornada:   true,
-    socialProof: "+1.200 prestadores ativos",
-    stat:        { value: "5em1", label: "assistentes integrados" },
-    features: [
-      "Clara atende e coleta o pedido",
-      "Otávio calcula o orçamento automaticamente",
-      "Helena garante sua margem de lucro",
-      "Lucas agenda a visita técnica",
-      "Maya divulga o projeto finalizado",
-    ],
-    cta:          "Ativar modo profissional",
-    conversation: [
-      { id: 1, type: "sent",     content: "Oi, preciso de um eletricista pra instalar tomadas no home office", time: "09:00", audio: true },
-      { id: 2, type: "received", content: "Oi! 👋 Aqui é a Clara da Silva Elétrica. Perfeito! Anotei tudo. Já passo pro Otávio calcular o orçamento!", time: "09:00", agent: "Clara" },
-      { id: 3, type: "received", content: "Oi! Sou o Otávio. 📋 Calculei: R$ 420 com material e mão de obra. Posso enviar o PDF?", time: "09:01", agent: "Otávio" },
-    ],
-  },
 ];
 
 // ─── Sub-componente: abas de navegação ────────────────────────────────────────
 
 interface AgentTabsProps {
-  agents:      Agent[];
-  activeId:    string;
-  onSelect:    (id: string) => void;
+  agents:   Agent[];
+  activeId: string;
+  onSelect: (id: string) => void;
 }
 
 function AgentTabs({ agents, activeId, onSelect }: AgentTabsProps) {
   return (
     <div className="flex flex-wrap justify-center gap-1.5 md:gap-0 mb-0" role="tablist" aria-label="Selecionar agente">
       {agents.map((agent) => {
-        const isActive   = activeId === agent.id;
-        const isJornada  = agent.id === "jornada";
-        const color      = AGENT_COLORS[agent.id];
+        const isActive = activeId === agent.id;
+        const color    = AGENT_COLORS[agent.id];
 
         return (
           <button
@@ -242,12 +213,10 @@ function AgentTabs({ agents, activeId, onSelect }: AgentTabsProps) {
             className={cn(
               "relative px-5 md:px-7 py-3 md:py-3.5 text-sm md:text-base font-semibold transition-all duration-300",
               "rounded-full md:rounded-t-2xl md:rounded-b-none",
-              isJornada && "flex items-center gap-2",
-              isActive  ? "text-foreground z-10" : "text-muted-foreground hover:text-foreground"
+              isActive ? "text-foreground z-10" : "text-muted-foreground hover:text-foreground"
             )}
             style={isActive ? { backgroundColor: `${color.primary}15` } : undefined}
           >
-            {isJornada && <Sparkles className="w-4 h-4" aria-hidden="true" />}
             {agent.tabLabel}
 
             {isActive && (
@@ -268,14 +237,11 @@ function AgentTabs({ agents, activeId, onSelect }: AgentTabsProps) {
 // ─── Sub-componente: painel de informações do agente ──────────────────────────
 
 interface AgentInfoPanelProps {
-  agent:    Agent;
-  color:    AgentColor;
-  activeId: string;
+  agent: Agent;
+  color: AgentColor;
 }
 
-function AgentInfoPanel({ agent, color, activeId }: AgentInfoPanelProps) {
-  const ctaHref = activeId === "jornada" ? "/jornada-integrada" : `/agente/${agent.id}`;
-
+function AgentInfoPanel({ agent, color }: AgentInfoPanelProps) {
   return (
     <div className="order-2 lg:order-1 space-y-5 text-center lg:text-left">
       {/* Nome e role */}
@@ -347,37 +313,23 @@ function AgentInfoPanel({ agent, color, activeId }: AgentInfoPanelProps) {
         </div>
       </motion.div>
 
-      {/* CTAs */}
+      {/* CTA */}
       <motion.div
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.55 }}
-        className="flex flex-col gap-3 justify-center lg:justify-start pt-2"
+        className="pt-2 flex justify-center lg:justify-start"
       >
-        <Link to={ctaHref}>
+        <Link to={`/agente/${agent.id}`}>
           <Button
             size="lg"
-            className={cn(
-              "gap-2 w-full font-bold text-sm sm:text-base",
-              activeId === "jornada"
-                ? "bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white"
-                : ""
-            )}
-            style={activeId !== "jornada" ? { backgroundColor: color.primary, color: "#fff" } : undefined}
+            className="gap-2 font-bold text-sm sm:text-base"
+            style={{ backgroundColor: color.primary, color: "#fff" }}
           >
             {agent.cta}
             <ChevronRight className="w-4 h-4" aria-hidden="true" />
           </Button>
         </Link>
-
-        {activeId !== "jornada" && (
-          <Link to="/jornada-integrada">
-            <Button size="lg" variant="outline" className="gap-2 w-full text-sm sm:text-base">
-              <Sparkles className="w-4 h-4 text-amber-600" aria-hidden="true" />
-              Ver Jornada Completa
-            </Button>
-          </Link>
-        )}
       </motion.div>
     </div>
   );
@@ -388,10 +340,9 @@ function AgentInfoPanel({ agent, color, activeId }: AgentInfoPanelProps) {
 interface WhatsAppChatProps {
   agent:           Agent;
   visibleMessages: number[];
-  isJornada:       boolean;
 }
 
-function WhatsAppChat({ agent, visibleMessages, isJornada }: WhatsAppChatProps) {
+function WhatsAppChat({ agent, visibleMessages }: WhatsAppChatProps) {
   return (
     <div className="rounded-[2.5rem] p-[2px] border border-border/40 shadow-float bg-background/50">
       <div className="bg-background rounded-[2.4rem] overflow-hidden">
@@ -399,23 +350,13 @@ function WhatsAppChat({ agent, visibleMessages, isJornada }: WhatsAppChatProps) 
         {/* Cabeçalho */}
         <div className="px-4 py-3 flex items-center gap-3" style={{ backgroundColor: "#075E54" }}>
           <div className="w-10 h-10 rounded-full overflow-hidden bg-white/20">
-            {agent.avatar ? (
-              <img src={agent.avatar} alt={agent.name} className="w-full h-full object-cover" />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center">
-                <Sparkles className="w-5 h-5 text-white" aria-hidden="true" />
-              </div>
-            )}
+            <img src={agent.avatar} alt={agent.name} className="w-full h-full object-cover" />
           </div>
           <div className="flex-1">
-            <p className="text-white font-semibold text-sm truncate">
-              {isJornada ? "Silva Serviços" : agent.name}
-            </p>
+            <p className="text-white font-semibold text-sm truncate">{agent.name}</p>
             <div className="flex items-center gap-1.5">
               <div className="w-2 h-2 rounded-full bg-green-300 animate-pulse" aria-hidden="true" />
-              <p className="text-white/70 text-xs">
-                {isJornada ? "5 assistentes ativos" : "online agora"}
-              </p>
+              <p className="text-white/70 text-xs">online agora</p>
             </div>
           </div>
         </div>
@@ -444,10 +385,6 @@ function WhatsAppChat({ agent, visibleMessages, isJornada }: WhatsAppChatProps) 
                   ? "bg-[#DCF8C6] rounded-tr-none"
                   : "bg-white rounded-tl-none"
               )}>
-                {message.agent && isJornada && (
-                  <p className="text-xs font-semibold text-primary mb-1">{message.agent}</p>
-                )}
-
                 {/* Áudio simulado */}
                 {message.audio && (
                   <div className="flex items-center gap-2 mb-1" aria-label="Mensagem de áudio">
@@ -506,7 +443,7 @@ function AgentPhoto({ agent, color }: AgentPhotoProps) {
     >
       <div className="w-full h-full rounded-[20px] overflow-hidden bg-section-beige">
         <img
-          src={agent.avatar!}
+          src={agent.avatar}
           alt={agent.name}
           className="w-full h-full object-cover object-top"
         />
@@ -526,84 +463,14 @@ function AgentPhoto({ agent, color }: AgentPhotoProps) {
   );
 }
 
-// ─── Sub-componente: Jornada completa ─────────────────────────────────────────
-
-const JORNADA_AVATARS = [
-  { src: claraAvatar,  color: AGENT_COLORS.clara,  name: "Clara"  },
-  { src: otavioAvatar, color: AGENT_COLORS.otavio, name: "Otávio" },
-  { src: lucasAvatar,  color: AGENT_COLORS.lucas,  name: "Lucas"  },
-  { src: helenaAvatar, color: AGENT_COLORS.helena, name: "Helena" },
-  { src: mayaAvatar,   color: AGENT_COLORS.maya,   name: "Maya"   },
-] as const;
-
-function JornadaTeam() {
-  const topRow    = JORNADA_AVATARS.slice(0, 3);
-  const bottomRow = JORNADA_AVATARS.slice(3, 5);
-
-  return (
-    <div className="flex flex-col items-center gap-3">
-      {/* Linha superior — 3 agentes */}
-      <div className="flex gap-3">
-        {topRow.map((item, i) => (
-          <motion.div
-            key={item.name}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 + i * 0.1, type: "spring" }}
-          >
-            <div
-              className="w-[90px] h-[90px] md:w-[100px] md:h-[100px] rounded-2xl overflow-hidden shadow-md border-2"
-              style={{ borderColor: item.color.primary }}
-            >
-              <img src={item.src} alt={item.name} className="w-full h-full object-cover object-top" />
-            </div>
-          </motion.div>
-        ))}
-      </div>
-
-      {/* Linha inferior — 2 agentes */}
-      <div className="flex gap-3 items-center">
-        {bottomRow.map((item, i) => (
-          <motion.div
-            key={item.name}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 + i * 0.1, type: "spring" }}
-          >
-            <div
-              className="w-[90px] h-[90px] md:w-[100px] md:h-[100px] rounded-2xl overflow-hidden shadow-md border-2"
-              style={{ borderColor: item.color.primary }}
-            >
-              <img src={item.src} alt={item.name} className="w-full h-full object-cover object-top" />
-            </div>
-          </motion.div>
-        ))}
-      </div>
-
-      {/* Badge */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.6 }}
-        className="-mt-7 z-10"
-      >
-        <div className="bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold px-4 py-2 rounded-full shadow-lg flex items-center gap-1.5">
-          <Sparkles className="w-3.5 h-3.5" aria-hidden="true" />
-          5 agentes trabalhando juntos
-        </div>
-      </motion.div>
-    </div>
-  );
-}
-
 // ─── Componente principal ─────────────────────────────────────────────────────
 
 /**
- * AgentShowcaseSection — apresenta os 5 agentes IA (+ Jornada integrada)
+ * AgentShowcaseSection — apresenta os 5 agentes IA individualmente
  * com navegação por abas, chat WhatsApp animado e foto do agente.
  */
 export function AgentShowcaseSection() {
-  const [activeAgent, setActiveAgent]       = useState("clara");
+  const [activeAgent, setActiveAgent]         = useState("clara");
   const [visibleMessages, setVisibleMessages] = useState<number[]>([]);
 
   const currentAgent = AGENTS.find((a) => a.id === activeAgent) ?? AGENTS[0];
@@ -665,15 +532,11 @@ export function AgentShowcaseSection() {
             {/* Decoração de fundo com avatares em órbita */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                {/* Brilho radial */}
                 <div className="absolute -inset-20 rounded-full bg-primary/5 blur-3xl" />
-
-                {/* Anéis de órbita */}
                 <div className="absolute -inset-[140px] rounded-full border border-border/15" />
                 <div className="absolute -inset-[220px] rounded-full border border-border/10" />
                 <div className="absolute -inset-[300px] rounded-full border border-border/5"  />
 
-                {/* Avatares orbitando */}
                 {ORBIT_CONFIG.map((orb, i) => (
                   <motion.div
                     key={i}
@@ -695,7 +558,6 @@ export function AgentShowcaseSection() {
                   </motion.div>
                 ))}
 
-                {/* Ícone central */}
                 <div className="relative w-12 h-12 rounded-full bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center shadow-lg opacity-20">
                   <Sparkles className="w-6 h-6 text-white" />
                 </div>
@@ -707,9 +569,9 @@ export function AgentShowcaseSection() {
               <div className="grid lg:grid-cols-[1fr_auto_1fr] gap-8 lg:gap-10 items-center max-w-6xl mx-auto">
 
                 {/* Coluna esquerda — info do agente */}
-                <AgentInfoPanel agent={currentAgent} color={colors} activeId={activeAgent} />
+                <AgentInfoPanel agent={currentAgent} color={colors} />
 
-                {/* Avatar mobile — substituí o chat no mobile */}
+                {/* Avatar mobile */}
                 <div className="order-1 lg:hidden flex justify-center">
                   <motion.div
                     key={`mobile-${activeAgent}`}
@@ -718,35 +580,31 @@ export function AgentShowcaseSection() {
                     transition={{ delay: 0.1, duration: 0.4, type: "spring" }}
                     className="relative"
                   >
-                    {activeAgent === "jornada" ? (
-                      <JornadaTeam />
-                    ) : (
-                      <div
-                        className="w-[200px] h-[230px] rounded-3xl p-[3px] shadow-sm relative border border-border/40"
-                        style={{ background: `linear-gradient(145deg, ${colors.primary}30, ${colors.primary}10)` }}
-                      >
-                        <div className="w-full h-full rounded-[20px] overflow-hidden bg-section-beige">
-                          <img
-                            src={currentAgent.avatar!}
-                            alt={currentAgent.name}
-                            className="w-full h-full object-cover object-top"
-                          />
-                        </div>
-                        <motion.div
-                          initial={{ opacity: 0, scale: 0 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: 0.5, type: "spring" }}
-                          className="absolute -bottom-3 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-background shadow-sm border border-border/50 flex items-center gap-2"
-                        >
-                          <div className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" aria-hidden="true" />
-                          <span className="text-xs font-bold text-foreground">IA Ativa 24/7</span>
-                        </motion.div>
+                    <div
+                      className="w-[200px] h-[230px] rounded-3xl p-[3px] shadow-sm relative border border-border/40"
+                      style={{ background: `linear-gradient(145deg, ${colors.primary}30, ${colors.primary}10)` }}
+                    >
+                      <div className="w-full h-full rounded-[20px] overflow-hidden bg-section-beige">
+                        <img
+                          src={currentAgent.avatar}
+                          alt={currentAgent.name}
+                          className="w-full h-full object-cover object-top"
+                        />
                       </div>
-                    )}
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.5, type: "spring" }}
+                        className="absolute -bottom-3 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-background shadow-sm border border-border/50 flex items-center gap-2"
+                      >
+                        <div className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" aria-hidden="true" />
+                        <span className="text-xs font-bold text-foreground">IA Ativa 24/7</span>
+                      </motion.div>
+                    </div>
                   </motion.div>
                 </div>
 
-                {/* Coluna central — chat WhatsApp (apenas desktop) */}
+                {/* Coluna central — chat WhatsApp (desktop) */}
                 <div className="hidden lg:block order-2">
                   <motion.div
                     initial={{ opacity: 0, scale: 0.96 }}
@@ -757,25 +615,20 @@ export function AgentShowcaseSection() {
                     <WhatsAppChat
                       agent={currentAgent}
                       visibleMessages={visibleMessages}
-                      isJornada={activeAgent === "jornada"}
                     />
                   </motion.div>
                 </div>
 
-                {/* Coluna direita — foto do agente (apenas desktop) */}
+                {/* Coluna direita — foto do agente (desktop) */}
                 <div className="order-3 hidden lg:flex justify-center items-center">
-                  {activeAgent === "jornada" ? (
-                    <JornadaTeam />
-                  ) : (
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: 0.2, duration: 0.5, type: "spring" }}
-                      className="relative flex items-center justify-center"
-                    >
-                      <AgentPhoto agent={currentAgent} color={colors} />
-                    </motion.div>
-                  )}
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.2, duration: 0.5, type: "spring" }}
+                    className="relative flex items-center justify-center"
+                  >
+                    <AgentPhoto agent={currentAgent} color={colors} />
+                  </motion.div>
                 </div>
 
               </div>
