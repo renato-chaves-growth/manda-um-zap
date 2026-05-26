@@ -22,7 +22,6 @@ import Carrinho from "./pages/Carrinho";
 import Checkout from "./pages/Checkout";
 import CompraSucesso from "./pages/CompraSucesso";
 import Produto from "./pages/Produto";
-import JornadaIntegrada from "./pages/JornadaIntegrada";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import Tutoriais from "./pages/Tutoriais";
@@ -72,7 +71,6 @@ const App = () => (
               <Route path="/cadastro" element={<Cadastro />} />
               <Route path="/cadastro-sucesso" element={<CadastroSucesso />} />
               <Route path="/produto" element={<Produto />} />
-              <Route path="/jornada-integrada" element={<JornadaIntegrada />} />
               <Route path="/carrinho" element={<Carrinho />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/compra-sucesso" element={<CompraSucesso />} />

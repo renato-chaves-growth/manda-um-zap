@@ -53,7 +53,7 @@ export function MegaMenu({ isOpen, onMouseEnter, onMouseLeave }: MegaMenuProps) 
       onMouseLeave={onMouseLeave}
     >
       <div className="container py-5">
-        <div className="grid grid-cols-3 gap-8">
+        <div className="grid grid-cols-2 gap-8">
 
           {/* Coluna — Agentes */}
           <div>
@@ -89,29 +89,6 @@ export function MegaMenu({ isOpen, onMouseEnter, onMouseLeave }: MegaMenuProps) 
             >
               Ver todos os agentes
               <ChevronRight className="w-3 h-3" aria-hidden="true" />
-            </Link>
-          </div>
-
-          {/* Coluna — Produtos */}
-          <div className="border-l border-border pl-8">
-            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
-              <Sparkles className="w-3.5 h-3.5" />
-              Produtos
-            </h3>
-
-            <Link
-              to="/jornada-integrada"
-              className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg hover:bg-muted transition-colors group"
-            >
-              <span className="p-1.5 rounded-md bg-muted group-hover:bg-background text-primary">
-                <Sparkles className="w-3.5 h-3.5" aria-hidden="true" />
-              </span>
-              <span>
-                <span className="block text-sm font-medium text-foreground group-hover:text-primary transition-colors">
-                  Jornada Integrada
-                </span>
-                <span className="text-xs text-muted-foreground">Todos os agentes conectados</span>
-              </span>
             </Link>
           </div>
 
