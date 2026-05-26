@@ -1,0 +1,442 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* AI Spin animation for agent cards */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 4s linear infinite;
+}
+
+/* ============================================
+   MandaUmZap Design System — WhatsApp-first
+   
+   🔵 Azul = Sistema / Confiança (nunca para ação principal)
+   🟢 Verde = Ação / Conversa / WhatsApp (clicar, falar, enviar, agora)
+   ⚪ Neutros = Respiro humano
+   
+   Cores WhatsApp Web autênticas:
+   - Teal Green: #075E54, #128C7E (cabeçalhos, marca)
+   - Light Green: #25D366 (notificações, destaque)
+   - Fundo conversa: #E5DDD5 (bege), #DCF8C6 (balões claros)
+   - Dark mode: #111B21, #0B141A, #202C33
+   
+   📐 Radius: Cards 16px, Buttons pill (999px), Chat 18-20px, Inputs 14px
+   🌫️ Sombras: Sutis, só para separar planos
+   ============================================ */
+
+@layer base {
+  :root {
+    /* ⚪ Fundo principal — Branco limpo */
+    --background: 0 0% 100%; /* #FFFFFF - Branco */
+    --foreground: 0 0% 0%; /* #000000 */
+
+    --card: 0 0% 100%; /* Branco para cards padrão */
+    --card-foreground: 0 0% 0%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
+    
+    /* 🟢 Seções alternadas — Fundos especiais */
+    --section-beige: 34 82% 96%; /* Bege quente #FCF5EB */
+    --section-green: 96 57% 94%; /* Verde claro #EEFAE5 */
+
+    /* 🟢 Verde WhatsApp — Cor Principal */
+    --primary: 142 70% 49%; /* #25D366 - WhatsApp Green */
+    --primary-foreground: 0 0% 100%;
+
+    /* Verde escuro (hover / fundos premium) */
+    --primary-dark: 174 85% 18%; /* #075E54 - Teal Principal */
+    --primary-dark-foreground: 0 0% 100%;
+    
+    /* Verde suave (cards / hover) */
+    --primary-soft: 146 76% 95%; /* #E9F9EF */
+
+    /* 🔵 Azul — Cor Secundária / Sistema */
+    --secondary: 217 91% 60%; /* #2563EB - Blue */
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 220 14% 96%;
+    --muted-foreground: 218 13% 38%; /* darkened for AA contrast on light + beige */
+
+    /* Accent agora usa tom suave de verde */
+    --accent: 146 76% 95%; /* #E9F9EF */
+    --accent-foreground: 174 85% 18%; /* Teal */
+
+    /* 🟢 Verde WhatsApp — Identidade autêntica */
+    --whatsapp: 142 70% 49%; /* #25D366 - Light Green/Accent */
+    --whatsapp-foreground: 0 0% 100%;
+    --whatsapp-teal: 174 85% 18%; /* #075E54 - Teal Principal */
+    --whatsapp-teal-light: 168 75% 31%; /* #128C7E - Teal Secundário */
+    --whatsapp-dark: 142 70% 42%; /* #1DA851 hover */
+    
+    /* Cores de conversa WhatsApp */
+    --chat-bg: 30 24% 86%; /* #E5DDD5 - Fundo conversa */
+    --chat-bubble-outgoing: 96 57% 89%; /* #DCF8C6 - Balão enviado */
+    --chat-bubble-incoming: 0 0% 100%; /* Branco - Balão recebido */
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* ⚪ Bordas leves */
+    --border: 220 13% 90%; /* #E5E7EB */
+    --input: 220 13% 90%;
+    --ring: 142 70% 49%; /* Verde WhatsApp para focus */
+
+    /* 📐 Radius padrão */
+    --radius: 1rem; /* 16px para cards */
+    --radius-button: 999px; /* pill buttons */
+    --radius-chat: 1.125rem; /* 18px balões */
+    --radius-input: 0.875rem; /* 14px inputs */
+
+    /* 🌫️ Sombras */
+    --shadow-sm: 0 4px 12px rgba(0,0,0,0.06);
+    --shadow-float: 0 8px 24px rgba(0,0,0,0.08);
+
+    /* Gradient colors */
+    --gradient-start: 168 75% 31%; /* Teal */
+    --gradient-end: 142 70% 49%; /* Green */
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 168 75% 31%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 90%;
+    --sidebar-ring: 168 75% 31%;
+  }
+
+  .dark {
+    /* Dark mode WhatsApp autêntico */
+    --background: 200 37% 10%; /* #111B21 */
+    --foreground: 0 0% 100%; /* #FFFFFF */
+
+    --card: 198 33% 12%; /* #0B141A */
+    --card-foreground: 0 0% 100%;
+
+    --popover: 198 33% 12%;
+    --popover-foreground: 0 0% 100%;
+    
+    /* Seções alternadas Dark Mode */
+    --section-beige: 200 20% 15%;
+    --section-green: 165 30% 15%;
+
+    --primary: 142 70% 49%; /* WhatsApp Green */
+    --primary-foreground: 0 0% 100%;
+
+    --primary-dark: 174 85% 18%; /* Teal */
+    --primary-dark-foreground: 0 0% 100%;
+    
+    --primary-soft: 165 50% 20%;
+
+    --secondary: 217 91% 55%; /* Blue */
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 197 28% 17%;
+    --muted-foreground: 200 15% 65%;
+
+    --accent: 165 50% 20%;
+    --accent-foreground: 142 70% 49%;
+
+    --whatsapp: 142 70% 49%;
+    --whatsapp-foreground: 0 0% 100%;
+    --whatsapp-teal: 174 85% 18%;
+    --whatsapp-teal-light: 168 75% 31%;
+    --whatsapp-dark: 142 70% 42%;
+    
+    /* Cores de conversa Dark Mode */
+    --chat-bg: 198 33% 8%;
+    --chat-bubble-outgoing: 165 50% 20%; /* Verde escuro */
+    --chat-bubble-incoming: 197 28% 17%; /* #202C33 */
+
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 197 28% 20%;
+    --input: 197 28% 17%;
+    --ring: 168 75% 31%;
+
+    --sidebar-background: 200 37% 10%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 142 70% 49%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 197 28% 17%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 197 28% 20%;
+    --sidebar-ring: 142 70% 49%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Outfit', system-ui, sans-serif;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Gradient text utility - WhatsApp teal to emerald */
+.text-gradient {
+  background: linear-gradient(135deg, hsl(168 76% 36%) 0%, hsl(142 71% 45%) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Light gradient for dark backgrounds */
+.text-gradient-light {
+  background: linear-gradient(135deg, hsl(168 76% 50%) 0%, hsl(142 71% 55%) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Background blobs */
+.bg-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.bg-blob-1 {
+  width: 600px;
+  height: 600px;
+  background: linear-gradient(180deg, hsl(142 70% 49% / 0.25) 0%, hsl(168 75% 31% / 0.1) 100%);
+  top: -100px;
+  right: -200px;
+}
+
+.bg-blob-2 {
+  width: 500px;
+  height: 500px;
+  background: linear-gradient(180deg, hsl(168 75% 31% / 0.2) 0%, hsl(142 70% 49% / 0.1) 100%);
+  top: 300px;
+  left: -150px;
+}
+
+.bg-blob-3 {
+  width: 450px;
+  height: 450px;
+  background: linear-gradient(180deg, hsl(142 70% 49% / 0.2) 0%, hsl(168 75% 31% / 0.08) 100%);
+  bottom: 150px;
+  right: 10%;
+}
+
+.bg-blob-4 {
+  width: 350px;
+  height: 350px;
+  background: linear-gradient(180deg, hsl(168 75% 31% / 0.15) 0%, hsl(142 70% 49% / 0.08) 100%);
+  top: 50%;
+  left: 20%;
+}
+
+/* Dark section background */
+.bg-dark-section {
+  background: linear-gradient(180deg, hsl(220 60% 12%) 0%, hsl(220 60% 8%) 100%);
+}
+
+/* Typewriter cursor animation */
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.typewriter-cursor {
+  animation: blink 1s infinite;
+}
+
+/* Fade in on scroll animation */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out forwards;
+}
+
+/* Stagger children animations */
+.stagger-children > * {
+  opacity: 0;
+  animation: fade-in-up 0.5s ease-out forwards;
+}
+
+.stagger-children > *:nth-child(1) { animation-delay: 0.1s; }
+.stagger-children > *:nth-child(2) { animation-delay: 0.2s; }
+.stagger-children > *:nth-child(3) { animation-delay: 0.3s; }
+.stagger-children > *:nth-child(4) { animation-delay: 0.4s; }
+.stagger-children > *:nth-child(5) { animation-delay: 0.5s; }
+
+/* Story card hover effect */
+.story-card {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.story-card:hover {
+  transform: scale(1.02);
+}
+
+.story-card .story-content {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.story-card:hover .story-content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.story-card .story-overlay {
+  opacity: 0;
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.story-card:hover .story-overlay {
+  opacity: 1;
+}
+
+/* Problem card hover effect */
+.problem-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.problem-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px -15px hsl(217 91% 60% / 0.2);
+}
+
+.problem-card:hover .problem-icon {
+  background: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(271 81% 55%) 100%);
+}
+
+.problem-card:hover .problem-icon svg {
+  color: white;
+}
+
+/* Floating logos animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(5deg);
+  }
+}
+
+.floating-logo {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Marquee animations for testimonials */
+@keyframes marquee-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-right {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.animate-marquee-left {
+  animation: marquee-left 30s linear infinite;
+}
+
+.animate-marquee-right {
+  animation: marquee-right 30s linear infinite;
+}
+
+.hero-rounded-bottom {
+  border-bottom-left-radius: 2rem !important;
+  border-bottom-right-radius: 2rem !important;
+}
+
+@media (min-width: 768px) {
+  .hero-rounded-bottom {
+    border-bottom-left-radius: 3rem !important;
+    border-bottom-right-radius: 3rem !important;
+  }
+}
+
+/* ============================================
+   Brutalist WhatsApp Style
+   Borda preta 2px + sombra sólida 4px preta
+   Aplicar em cards, boxes, simulações de chat e modais
+   ============================================ */
+.brutalist-box {
+  border: 2px solid hsl(var(--foreground));
+  box-shadow: 4px 4px 0px 0px hsl(var(--foreground));
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.brutalist-box-sm {
+  border: 2px solid hsl(var(--foreground));
+  box-shadow: 2px 2px 0px 0px hsl(var(--foreground));
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.brutalist-box-lg {
+  border: 2px solid hsl(var(--foreground));
+  box-shadow: 6px 6px 0px 0px hsl(var(--foreground));
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.brutalist-hover:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px 0px hsl(var(--foreground));
+}
+
+.brutalist-hover-lg:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 8px 8px 0px 0px hsl(var(--foreground));
+}
+
+.brutalist-press:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0px 0px hsl(var(--foreground));
+}
+
+/* Outline-only variant — sem sombra, só contorno fino preto */
+.brutalist-outline {
+  border: 2px solid hsl(var(--foreground));
+}
