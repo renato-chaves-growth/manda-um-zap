@@ -60,8 +60,10 @@ const App = () => (
         <BrowserRouter>
           <ScrollToTop />
           <Routes>
+            {/* Landing page — standalone (own header/footer) */}
+            <Route path="/" element={<Index />} />
+
             <Route element={<Layout />}>
-              <Route path="/" element={<Index />} />
               <Route path="/agentes" element={<Agentes />} />
               <Route path="/agente/:agentId" element={<AgentePage />} />
               <Route path="/como-funciona" element={<ComoFunciona />} />
