@@ -1,6 +1,7 @@
-import { useEffect, useLayoutEffect } from "react";
+import { useLayoutEffect } from "react";
 import { useLocation } from "react-router-dom";
 
+/** Rola para o topo instantaneamente a cada mudança de rota. */
 export function ScrollToTop() {
   const { pathname } = useLocation();
 
