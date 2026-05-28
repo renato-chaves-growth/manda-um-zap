@@ -26,7 +26,9 @@ const Cadastro = () => {
   const [whatsapp, setWhatsapp] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const { toast } = useToast();
@@ -35,13 +37,18 @@ const Cadastro = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!name.trim() || !whatsapp.trim() || !email.trim() || !password.trim()) {
+    if (!name.trim() || !whatsapp.trim() || !email.trim() || !password.trim() || !confirmPassword.trim()) {
       toast({ title: "Preencha todos os campos", variant: "destructive" });
       return;
     }
 
     if (password.length < 6) {
       toast({ title: "Senha muito curta", description: "Mínimo 6 caracteres.", variant: "destructive" });
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      toast({ title: "Senhas não conferem", description: "A confirmação de senha deve ser igual à senha.", variant: "destructive" });
       return;
     }
 
@@ -169,6 +176,33 @@ const Cadastro = () => {
                         {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                       </button>
                     </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="confirmPassword">Confirmar senha</Label>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                      <Input
+                        id="confirmPassword"
+                        type={showConfirmPassword ? "text" : "password"}
+                        placeholder="••••••••"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        className={`pl-10 pr-10 ${confirmPassword && password !== confirmPassword ? "border-red-400 focus-visible:ring-red-400" : confirmPassword && password === confirmPassword ? "border-green-500 focus-visible:ring-green-500" : ""}`}
+                        required
+                        minLength={6}
+                        autoComplete="new-password"
+                      />
+                      <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+                        {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                    {confirmPassword && password !== confirmPassword && (
+                      <p className="text-xs text-red-500">Senhas não conferem</p>
+                    )}
+                    {confirmPassword && password === confirmPassword && (
+                      <p className="text-xs text-green-600">✓ Senhas conferem</p>
+                    )}
                   </div>
 
                   <Button
