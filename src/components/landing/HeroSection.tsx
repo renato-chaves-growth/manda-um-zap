@@ -192,10 +192,10 @@ export function HeroSection() {
                 Começar agora
               </a>
               <a
-                href="#como-funciona"
+                href="/como-funciona"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-white border-2 border-black text-black font-bold text-base shadow-[5px_5px_0_#000] hover:shadow-none hover:translate-x-[5px] hover:translate-y-[5px] transition-all duration-150"
               >
-                Ver como funciona ↓
+                Ver como funciona →
               </a>
             </div>
 

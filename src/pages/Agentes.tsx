@@ -350,88 +350,56 @@ const AgentesPage = () => {
         {/* Pricing Comparison */}
         <section className="py-16 md:py-20">
           <div className="container">
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-5xl mx-auto">
               <div className="text-center mb-12">
                 <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                  <span className="text-foreground">Quanto mais agentes, </span>
-                  <span className="text-primary">melhor o preço</span>
+                  <span className="text-foreground">Preço simples. </span>
+                  <span className="text-primary">R$&nbsp;29,00 por agente</span>
                 </h2>
                 <p className="text-lg text-muted-foreground">
-                  Monte o time ideal para sua prestação de serviços. Sem contrato, sem complicação.
+                  Ative apenas os que precisar. Sem contrato, sem complicação.
                 </p>
               </div>
 
-              <div className="grid md:grid-cols-4 gap-5">
-                {/* Começar */}
-                <Card className="border-border/50">
-                  <CardContent className="p-6 text-center">
-                    <p className="text-sm text-muted-foreground mb-1 font-medium">Começar</p>
-                    <p className="text-xs text-muted-foreground mb-3">1 Agente</p>
-                    <div className="flex items-baseline justify-center gap-1 mb-4">
-                      <span className="text-3xl font-bold text-foreground">R$ 29</span>
-                      <span className="text-muted-foreground text-sm">/mês</span>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+                {[
+                  { id: "clara",  name: "Clara",  role: "Atendimento", color: "#25D366", avatar: claraAvatar  },
+                  { id: "otavio", name: "Otávio", role: "Orçamento",   color: "#8B5CF6", avatar: otavioAvatar },
+                  { id: "lucas",  name: "Lucas",  role: "Agenda",      color: "#3B82F6", avatar: lucasAvatar  },
+                  { id: "helena", name: "Helena", role: "Financeiro",  color: "#F59E0B", avatar: helenaAvatar },
+                  { id: "maya",   name: "Maya",   role: "Divulgação",  color: "#F97316", avatar: mayaAvatar   },
+                ].map((agent) => (
+                  <Card key={agent.id} className="border-2 border-black shadow-[4px_4px_0_#000] overflow-hidden flex flex-col">
+                    <div className="relative w-full aspect-[3/2] overflow-hidden bg-muted">
+                      <img
+                        src={agent.avatar}
+                        alt={agent.name}
+                        className="w-full h-full object-cover object-top"
+                      />
                     </div>
-                    <Link to="/precos">
-                      <Button variant="outline" className="w-full text-sm">Escolher agente</Button>
-                    </Link>
-                  </CardContent>
-                </Card>
+                    <CardContent className="p-3 flex flex-col gap-1 flex-1">
+                      <p className="font-bold text-sm text-foreground leading-tight">{agent.name}</p>
+                      <p className="text-xs text-muted-foreground">{agent.role}</p>
+                      <p className="text-xs font-bold mt-auto pt-1" style={{ color: agent.color }}>
+                        R$ 29,00/mês
+                      </p>
+                      <Link to={`/carrinho?agentes=${agent.id}`} className="mt-2">
+                        <Button size="sm" variant="outline" className="w-full text-xs border-black hover:bg-black hover:text-white transition-colors">
+                          Ativar
+                        </Button>
+                      </Link>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
 
-                {/* Trabalhar */}
-                <Card className="border-border/50">
-                  <CardContent className="p-6 text-center">
-                    <p className="text-sm text-muted-foreground mb-1 font-medium">Trabalhar</p>
-                    <p className="text-xs text-muted-foreground mb-3">Até 2 Agentes</p>
-                    <div className="flex items-baseline justify-center gap-1 mb-4">
-                      <span className="text-3xl font-bold text-foreground">R$ 49</span>
-                      <span className="text-muted-foreground text-sm">/mês</span>
-                    </div>
-                    <Link to="/precos">
-                      <Button variant="outline" className="w-full text-sm">Escolher agentes</Button>
-                    </Link>
-                  </CardContent>
-                </Card>
-
-                {/* Vender Mais — Recomendado */}
-                <Card className="border-2 border-primary relative overflow-hidden">
-                  <div className="absolute top-0 right-0 bg-primary text-primary-foreground text-xs font-medium px-3 py-1 rounded-bl-lg">
-                    Recomendado
-                  </div>
-                  <CardContent className="p-6 text-center">
-                    <p className="text-sm text-primary mb-1 font-semibold">Vender Mais</p>
-                    <p className="text-xs text-muted-foreground mb-3">Todos os Agentes</p>
-                    <div className="flex items-baseline justify-center gap-1 mb-4">
-                      <span className="text-3xl font-bold text-primary">R$ 79</span>
-                      <span className="text-muted-foreground text-sm">/mês</span>
-                    </div>
-                    <Link to="/precos">
-                      <Button className="w-full gap-2 text-sm">
-                        <Sparkles className="w-4 h-4" />
-                        Quero todos
-                      </Button>
-                    </Link>
-                  </CardContent>
-                </Card>
-
-                {/* Tudo Automático */}
-                <Card className="border-2 border-[hsl(38,92%,50%)] relative overflow-hidden">
-                  <div className="absolute top-0 right-0 bg-[hsl(38,92%,50%)] text-white text-xs font-medium px-3 py-1 rounded-bl-lg">
-                    Ideal
-                  </div>
-                  <CardContent className="p-6 text-center">
-                    <p className="text-sm text-[hsl(38,92%,50%)] mb-1 font-semibold">Tudo Automático</p>
-                    <p className="text-xs text-muted-foreground mb-3">Agentes Integrados</p>
-                    <div className="flex items-baseline justify-center gap-1 mb-4">
-                      <span className="text-3xl font-bold text-[hsl(38,92%,50%)]">R$ 129</span>
-                      <span className="text-muted-foreground text-sm">/mês</span>
-                    </div>
-                    <Link to="/precos">
-                      <Button variant="outline" className="w-full text-sm">
-                        Automatizar tudo
-                      </Button>
-                    </Link>
-                  </CardContent>
-                </Card>
+              <div className="text-center mb-6">
+                <Link to="/precos">
+                  <Button className="gap-2 rounded-full shadow-[4px_4px_0_#000] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-150">
+                    <Sparkles className="w-4 h-4" />
+                    Montar meu time de agentes
+                  </Button>
+                </Link>
               </div>
 
               <div className="mt-8 text-center">

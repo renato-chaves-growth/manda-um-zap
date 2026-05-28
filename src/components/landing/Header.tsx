@@ -38,13 +38,13 @@ export function LandingHeader() {
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-8">
-            <a href="#como-funciona" className="font-sans text-sm font-semibold text-gray-700 hover:text-black transition-colors">
+            <a href="/como-funciona" className="font-sans text-sm font-semibold text-gray-700 hover:text-black transition-colors">
               Como funciona
             </a>
-            <a href="#agentes" className="font-sans text-sm font-semibold text-gray-700 hover:text-black transition-colors">
+            <a href="/agentes" className="font-sans text-sm font-semibold text-gray-700 hover:text-black transition-colors">
               Agentes
             </a>
-            <a href="#precos" className="font-sans text-sm font-semibold text-gray-700 hover:text-black transition-colors">
+            <a href="/precos" className="font-sans text-sm font-semibold text-gray-700 hover:text-black transition-colors">
               Preços
             </a>
             <a href="#faq" className="font-sans text-sm font-semibold text-gray-700 hover:text-black transition-colors">
@@ -89,9 +89,9 @@ export function LandingHeader() {
         <div className="md:hidden bg-white border-t-2 border-black">
           <nav className="flex flex-col px-4 py-4 gap-4">
             {[
-              { href: "#como-funciona", label: "Como funciona" },
-              { href: "#agentes", label: "Agentes" },
-              { href: "#precos", label: "Preços" },
+              { href: "/como-funciona", label: "Como funciona" },
+              { href: "/agentes", label: "Agentes" },
+              { href: "/precos", label: "Preços" },
               { href: "#faq", label: "FAQ" },
             ].map((item) => (
               <a

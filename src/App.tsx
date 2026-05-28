@@ -32,6 +32,8 @@ import Cases from "./pages/Cases";
 import CasePage from "./pages/CasePage";
 import NotFound from "./pages/NotFound";
 import Marketplace from "./pages/Marketplace";
+import Termos from "./pages/Termos";
+import Privacidade from "./pages/Privacidade";
 
 // Conta sub-pages
 import Perfil from "./pages/conta/Perfil";
@@ -82,6 +84,8 @@ const App = () => (
               <Route path="/guias/:slug" element={<GuidePage />} />
               <Route path="/cases" element={<Cases />} />
               <Route path="/cases/:slug" element={<CasePage />} />
+              <Route path="/termos" element={<Termos />} />
+              <Route path="/privacidade" element={<Privacidade />} />
 
               {/* Área logada — protegida */}
               <Route

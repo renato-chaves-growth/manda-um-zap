@@ -724,7 +724,7 @@ const AgentePage = () => {
                         <div className="flex justify-between items-baseline mb-4">
                           <span className="text-sm text-muted-foreground">{pricing.label}</span>
                           <div className="text-right">
-                            <p className="text-2xl font-bold text-gradient">R$ {pricing.price}</p>
+                            <p className="text-2xl font-bold text-gradient">R$ {pricing.price.toFixed(2).replace(".", ",")}</p>
                             <p className="text-xs text-muted-foreground">/mês</p>
                           </div>
                         </div>
