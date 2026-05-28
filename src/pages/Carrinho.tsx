@@ -6,9 +6,11 @@ import { Badge } from "@/components/ui/badge";
 import {
   Check, ArrowRight, Star, Shield, Users, Zap, Clock,
   MessageCircle, Calculator, Calendar, Wallet, Instagram,
-  X, Plus, ChevronLeft,
+  X, Plus, ChevronLeft, Loader2,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/lib/supabase";
 
 import claraAvatar      from "@/assets/avatars/ze-atendimento-v3.webp";
 import otavioAvatar     from "@/assets/avatars/chico-orcamento-v3.webp";
@@ -107,8 +109,10 @@ const Carrinho = () => {
     return ids.length > 0 ? ids : ["clara"];
   }, [searchParams]);
 
-  const [selectedIds, setSelectedIds] = useState<string[]>(initialIds);
-  const [isAnnual, setIsAnnual]       = useState(false);
+  const [selectedIds, setSelectedIds]       = useState<string[]>(initialIds);
+  const [isAnnual, setIsAnnual]             = useState(false);
+  const [isPaymentLoading, setIsPaymentLoading] = useState(false);
+  const { toast } = useToast();
 
   // Agentes no carrinho e disponíveis para upsell
   const cartAgents   = ALL_AGENTS.filter((a) => selectedIds.includes(a.id));
@@ -131,8 +135,42 @@ const Carrinho = () => {
     setSelectedIds((prev) => [...prev, id]);
   };
 
-  const handleContinue = () => {
-    navigate(`/checkout?agentes=${selectedIds.join(",")}&ciclo=${isAnnual ? "annual" : "monthly"}`);
+  const handleContinue = async () => {
+    // Verifica se o usuário está logado
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+      // Salva destino e redireciona para login
+      navigate(`/login?redirect=/carrinho?agentes=${selectedIds.join(",")}`);
+      return;
+    }
+
+    setIsPaymentLoading(true);
+
+    try {
+      const response = await fetch("/api/create-checkout-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          agentIds: selectedIds,
+          userId: user.id,
+          ciclo: isAnnual ? "annual" : "monthly",
+        }),
+      });
+
+      const data = await response.json() as { url?: string; error?: string };
+
+      if (!response.ok || !data.url) {
+        throw new Error(data.error ?? "Erro ao criar sessão de pagamento");
+      }
+
+      // Redireciona para o Stripe Checkout (sai do SPA)
+      window.location.href = data.url;
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Erro inesperado";
+      toast({ title: "Erro ao processar pagamento", description: msg, variant: "destructive" });
+      setIsPaymentLoading(false);
+    }
   };
 
   return (
@@ -413,9 +451,13 @@ const Carrinho = () => {
                     size="lg"
                     className="w-full gap-2 h-12 mb-4"
                     onClick={handleContinue}
+                    disabled={isPaymentLoading}
                   >
-                    Contratar agora
-                    <ArrowRight className="w-4 h-4" />
+                    {isPaymentLoading ? (
+                      <><Loader2 className="w-4 h-4 animate-spin" />Redirecionando...</>
+                    ) : (
+                      <>Contratar agora<ArrowRight className="w-4 h-4" /></>
+                    )}
                   </Button>
 
                   <div className="space-y-2 text-xs text-muted-foreground">
