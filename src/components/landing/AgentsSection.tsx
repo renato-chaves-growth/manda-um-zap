@@ -130,7 +130,7 @@ export function AgentsSection() {
                     className="flex items-center justify-center gap-1 py-2 rounded-xl border-2 border-black shadow-[2px_2px_0_#000]"
                     style={{ background: agent.color }}
                   >
-                    <span className="text-xs font-black text-black">R$ 29,90</span>
+                    <span className="text-xs font-black text-black">R$ 29,00</span>
                     <span className="text-[10px] font-semibold text-black/70">/mês</span>
                   </div>
                 </div>

@@ -23,8 +23,8 @@ const faqs = [
     a: "Sim, sem multa e sem burocracia. Você cancela direto no painel ou manda mensagem para nosso suporte. A cobrança é mensal.",
   },
   {
-    q: "Como funciona o preço de R$ 29,90 por agente?",
-    a: "Você paga apenas pelos agentes que ativar. Se quiser só a Clara para atendimento, paga R$ 29,90/mês. Se quiser Clara + Lucas (agenda), paga R$ 59,80/mês. Simples assim.",
+    q: "Como funciona o preço de R$ 29,00 por agente?",
+    a: "Você paga apenas pelos agentes que ativar. Se quiser só a Clara para atendimento, paga R$ 29,00/mês. Se quiser Clara + Lucas (agenda), paga R$ 58,00/mês. Simples assim.",
   },
 ];
 

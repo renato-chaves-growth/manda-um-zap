@@ -40,7 +40,7 @@ export function CTASection() {
           <div className="h-px w-16 bg-white/20" />
           <span className="font-sans text-white/50 text-sm">
             A partir de{" "}
-            <strong className="text-white text-base">R$&nbsp;29,90/mês</strong>
+            <strong className="text-white text-base">R$&nbsp;29,00/mês</strong>
             {" "}· cancele quando quiser
           </span>
           <div className="h-px w-16 bg-white/20" />

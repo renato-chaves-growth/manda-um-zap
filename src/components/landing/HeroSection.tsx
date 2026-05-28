@@ -201,7 +201,7 @@ export function HeroSection() {
 
             {/* Trust badges */}
             <div className="flex flex-wrap items-center gap-3 pt-2">
-              {["Sem contrato", "Sem instalação", "R$29,90/agente"].map((b) => (
+              {["Sem contrato", "Sem instalação", "R$29,00/agente"].map((b) => (
                 <span key={b} className="px-3 py-1.5 rounded-full bg-white border-2 border-black text-xs font-bold text-black shadow-[2px_2px_0_#000]">
                   {b}
                 </span>

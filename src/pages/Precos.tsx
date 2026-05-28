@@ -27,15 +27,15 @@ const PrecosPage = () => {
               className="max-w-3xl mx-auto text-center"
             >
               <p className="text-sm md:text-base text-muted-foreground mb-4">
-                Nossos planos
+                Preço simples e transparente
               </p>
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-foreground mb-6 leading-tight">
-                Preços simples e justos
+                R$&nbsp;29,00 por agente
                 <br />
-                <span className="text-primary">sem surpresa</span>
+                <span className="text-primary">por mês</span>
               </h1>
               <p className="text-lg md:text-xl text-muted-foreground mb-6 max-w-2xl mx-auto">
-                Escolha o plano ideal para a sua prestação de serviços. Sem contrato. Tudo pelo WhatsApp.
+                Escolha seus agentes e ative apenas os que precisar. Sem contrato. Tudo pelo WhatsApp.
               </p>
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-whatsapp/10 text-whatsapp font-medium">
                 <MessageCircle className="w-5 h-5" />

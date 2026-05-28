@@ -270,10 +270,7 @@ const AgentePage = () => {
   const pricing = useMemo(() => {
     const count = selectedAgents.length;
     if (count === 0) return { price: 0, label: "Selecione agentes", perAgent: 0 };
-    if (count === 1) return { price: 29, label: "1 Agente", perAgent: 29 };
-    if (count === 2) return { price: 49, label: "Até 2 Agentes", perAgent: 24.5 };
-    if (count >= 5) return { price: 79, label: "Todos os Agentes", perAgent: 15.8 };
-    return { price: 49 + (count - 2) * 10, label: `${count} Agentes`, perAgent: (49 + (count - 2) * 10) / count };
+    return { price: count * 29, label: `${count} Agente${count > 1 ? "s" : ""}`, perAgent: 29 };
   }, [selectedAgents]);
 
   const handleCheckout = () => {
@@ -685,7 +682,7 @@ const AgentePage = () => {
                 <div className="mt-6 text-center">
                   <Button variant="outline" onClick={selectAll} className="gap-2">
                     <Sparkles className="w-4 h-4" />
-                    Selecionar todos por R$ 79/mês
+                    Selecionar todos (R$ 145/mês)
                   </Button>
                 </div>
               </div>
@@ -731,12 +728,6 @@ const AgentePage = () => {
                             <p className="text-xs text-muted-foreground">/mês</p>
                           </div>
                         </div>
-
-                        {selectedAgents.length >= 5 && (
-                          <div className="p-3 rounded-lg bg-green-50 text-green-700 text-sm mb-4">
-                            🎉 Economia de R$ {29 * 5 - 79}/mês
-                          </div>
-                        )}
 
                         <Button size="lg" className="w-full gap-2" onClick={handleCheckout}>
                           Quero começar

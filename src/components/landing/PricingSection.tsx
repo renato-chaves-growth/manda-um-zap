@@ -10,7 +10,7 @@ const agents = [
   { id: "maya",   name: "Maya",   role: "Divulgação",   color: "#F97316", initial: "M" },
 ];
 
-const PRICE_PER_AGENT = 29.90;
+const PRICE_PER_AGENT = 29.00;
 
 export function PricingSection() {
   const [selected, setSelected] = useState<Set<string>>(new Set(["clara"]));
@@ -41,8 +41,8 @@ export function PricingSection() {
             Monte seu time de IA.
           </h2>
           <p className="mt-4 font-sans text-gray-500 text-lg">
-            <strong className="text-black">R$ 29,90</strong> por agente por mês.
-            Sem taxa de setup. Sem fidelidade.
+            <strong className="text-black">R$ 29,00</strong> por agente por mês.
+            Sem taxa de setup. Sem fidelidade. Cancele quando quiser.
           </p>
         </div>
 
@@ -101,7 +101,7 @@ export function PricingSection() {
                     {agent.role}
                   </p>
                   <p className={`font-sans text-xs font-bold mt-2 ${isSelected ? "text-black" : "text-gray-400"}`}>
-                    R$ 29,90/mês
+                    R$ 29,00/mês
                   </p>
                 </button>
               );
