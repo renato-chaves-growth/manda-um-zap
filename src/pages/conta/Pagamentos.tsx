@@ -3,18 +3,21 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
-  CreditCard, CheckCircle2, AlertCircle, ShoppingCart, Loader2
+  CreditCard, CheckCircle2, AlertCircle, ShoppingCart, Loader2, ExternalLink
 } from "lucide-react";
 import { useProfile } from "@/hooks/useProfile";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect, useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Pagamentos() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { profile, loading } = useProfile();
+  const { toast } = useToast();
   const [activeCount, setActiveCount] = useState<number | null>(null);
+  const [portalLoading, setPortalLoading] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -28,6 +31,32 @@ export default function Pagamentos() {
 
   const isPaid = profile?.plan === "paid" || profile?.plan === "pro";
   const isActive = profile?.plan_status === "active";
+
+  const handlePortal = async () => {
+    if (!user) return;
+    setPortalLoading(true);
+    try {
+      const res = await fetch("/api/create-portal-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: user.id }),
+      });
+      const data = await res.json() as { url?: string; error?: string };
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        toast({
+          title: "Não foi possível abrir o portal",
+          description: data.error ?? "Tente novamente.",
+          variant: "destructive",
+        });
+      }
+    } catch {
+      toast({ title: "Erro de conexão", description: "Tente novamente.", variant: "destructive" });
+    } finally {
+      setPortalLoading(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -70,12 +99,25 @@ export default function Pagamentos() {
           </CardHeader>
           <CardContent>
             {isPaid && isActive ? (
-              <div className="p-4 rounded-xl bg-green-50 border border-green-200 text-sm text-green-800">
-                <p className="font-medium mb-1">Assinatura ativa ✅</p>
-                <p className="text-green-700">
-                  Seus agentes estão funcionando 24h pelo WhatsApp.
-                  Para gerenciar a assinatura (cancelar, alterar), acesse o Stripe Customer Portal.
-                </p>
+              <div className="p-4 rounded-xl bg-green-50 border border-green-200 space-y-4">
+                <div>
+                  <p className="text-sm font-medium text-green-800 mb-1">Assinatura ativa ✅</p>
+                  <p className="text-sm text-green-700">
+                    Seus agentes estão funcionando 24h pelo WhatsApp.
+                  </p>
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="gap-2 border-green-300 text-green-800 hover:bg-green-100"
+                  onClick={handlePortal}
+                  disabled={portalLoading}
+                >
+                  {portalLoading
+                    ? <Loader2 className="w-4 h-4 animate-spin" />
+                    : <ExternalLink className="w-4 h-4" />}
+                  {portalLoading ? "Abrindo..." : "Gerenciar assinatura"}
+                </Button>
               </div>
             ) : (
               <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl bg-muted/50 gap-3">
@@ -111,8 +153,20 @@ export default function Pagamentos() {
               </div>
               <div className="flex-1">
                 <p className="text-sm font-medium text-foreground">Cartão cadastrado no Stripe</p>
-                <p className="text-xs text-muted-foreground">Para alterar o cartão, acesse o portal do cliente</p>
+                <p className="text-xs text-muted-foreground">Para alterar o cartão, clique em "Gerenciar assinatura"</p>
               </div>
+              {isPaid && isActive && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="gap-1 text-xs text-muted-foreground"
+                  onClick={handlePortal}
+                  disabled={portalLoading}
+                >
+                  {portalLoading ? <Loader2 className="w-3 h-3 animate-spin" /> : <ExternalLink className="w-3 h-3" />}
+                  Alterar
+                </Button>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -126,6 +180,19 @@ export default function Pagamentos() {
           <CardContent>
             <div className="p-4 rounded-xl bg-muted/50 text-sm text-muted-foreground text-center">
               O Stripe envia automaticamente recibos para o seu e-mail após cada cobrança.
+              {isPaid && isActive && (
+                <span className="block mt-2">
+                  Para ver o histórico completo,{" "}
+                  <button
+                    className="text-primary underline underline-offset-2 font-medium"
+                    onClick={handlePortal}
+                    disabled={portalLoading}
+                  >
+                    acesse o portal do cliente
+                  </button>
+                  .
+                </span>
+              )}
             </div>
           </CardContent>
         </Card>

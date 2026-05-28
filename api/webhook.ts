@@ -69,10 +69,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(500).json({ error: "Falha ao ativar agentes" });
     }
 
-    // 2. Atualiza plano no perfil
+    // 2. Atualiza plano + salva stripe_customer_id no perfil
+    const customerId = typeof session.customer === "string"
+      ? session.customer
+      : (session.customer as Stripe.Customer | null)?.id ?? null;
+
+    const profileUpdate: Record<string, unknown> = {
+      plan: "paid",
+      plan_status: "active",
+    };
+    if (customerId) profileUpdate.stripe_customer_id = customerId;
+
     const { error: profileErr } = await supabaseAdmin
       .from("profiles")
-      .update({ plan: "paid", plan_status: "active" })
+      .update(profileUpdate)
       .eq("id", userId);
 
     if (profileErr) {
