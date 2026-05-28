@@ -80,6 +80,19 @@ const DAYS_OF_WEEK = [
   { key: "qui", label: "Qui" }, { key: "sex", label: "Sex" }, { key: "sab", label: "Sáb" }, { key: "dom", label: "Dom" },
 ];
 
+const BUSINESS_TYPES = [
+  { value: "eletricista",  label: "Eletricista",   emoji: "⚡" },
+  { value: "encanador",    label: "Encanador",      emoji: "🔧" },
+  { value: "pintor",       label: "Pintor",          emoji: "🖌️" },
+  { value: "marceneiro",   label: "Marceneiro",     emoji: "🪚" },
+  { value: "pedreiro",     label: "Pedreiro",       emoji: "🧱" },
+  { value: "jardineiro",   label: "Jardineiro",     emoji: "🌿" },
+  { value: "gesseiro",     label: "Gesseiro",       emoji: "🏗️" },
+  { value: "vidraceiro",   label: "Vidraceiro",     emoji: "🪟" },
+  { value: "serralheiro",  label: "Serralheiro",    emoji: "⚙️" },
+  { value: "outro",        label: "Outro",           emoji: "🛠️" },
+];
+
 const MARGIN_OPTIONS = [
   { value: "baixa", label: "Baixa (até 20%)", description: "Foco em volume" },
   { value: "media", label: "Média (20-40%)", description: "Equilíbrio" },
@@ -106,6 +119,7 @@ export default function Perfil() {
     days: { seg: true, ter: true, qua: true, qui: true, sex: true, sab: true, dom: false } as Record<string, boolean>,
     startTime: "08:00", endTime: "18:00",
   });
+  const [businessType, setBusinessType] = useState("outro");
   const [whatsappInstance, setWhatsappInstance] = useState(""); // Z-API instanceId
   const [whatsappToken, setWhatsappToken] = useState("");       // Z-API instanceToken
   const [passwordData, setPasswordData] = useState({ current: "", new: "", confirm: "" });
@@ -120,6 +134,7 @@ export default function Perfil() {
     setCity(profile.city || "");
     setInstagram(profile.instagram || "");
     setBio(profile.bio || "");
+    if (profile.business_type) setBusinessType(profile.business_type);
     if (profile.margin) setMargin(profile.margin);
     if (profile.schedule) setSchedule(profile.schedule);
     setWhatsappInstance(profile.whatsapp_instance || "");
@@ -134,6 +149,7 @@ export default function Perfil() {
       full_name: name,
       whatsapp,
       business_name: businessName,
+      business_type: businessType,
       city,
       instagram,
       bio,
@@ -218,7 +234,32 @@ export default function Perfil() {
 
         {/* Identidade */}
         <ProfileSection title="Identidade da prestação de serviços" description="Dados do seu negócio" icon={Building2}>
-          <div className="space-y-4">
+          <div className="space-y-5">
+            {/* Tipo de serviço */}
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">Tipo de serviço</Label>
+              <div className="flex flex-wrap gap-2">
+                {BUSINESS_TYPES.map((bt) => (
+                  <button
+                    key={bt.value}
+                    type="button"
+                    onClick={() => setBusinessType(bt.value)}
+                    className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-sm font-medium border transition-all ${
+                      businessType === bt.value
+                        ? "bg-primary text-primary-foreground border-primary shadow-[2px_2px_0px_#000]"
+                        : "bg-background border-border text-muted-foreground hover:border-primary/50 hover:text-foreground"
+                    }`}
+                  >
+                    <span>{bt.emoji}</span>
+                    {bt.label}
+                  </button>
+                ))}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Usado pelos agentes para personalizar respostas e linguagem
+              </p>
+            </div>
+
             <EditableField label="Nome da prestação de serviços" icon={Building2} value={businessName} onChange={setBusinessName} />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <EditableField label="Cidade" icon={MapPin} value={city} onChange={setCity} />

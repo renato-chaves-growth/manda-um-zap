@@ -7,6 +7,7 @@ export interface Profile {
   full_name: string | null;
   whatsapp: string | null;
   business_name: string | null;
+  business_type: string | null;      // eletricista, encanador, pintor, etc.
   city: string | null;
   instagram: string | null;
   bio: string | null;

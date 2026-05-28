@@ -87,7 +87,7 @@ Deno.serve(async (req) => {
     // 1. Buscar o marceneiro dono dessa instância Z-API
     const { data: profile, error: profileErr } = await supabase
       .from("profiles")
-      .select("id, full_name, business_name, city, margin, schedule, whatsapp_token")
+      .select("id, full_name, business_name, business_type, city, margin, schedule, whatsapp_token")
       .eq("whatsapp_instance", instanceId)
       .single();
 
