@@ -5,60 +5,30 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 
+import claraAvatar   from "@/assets/avatars/ze-atendimento-v3.webp";
+import otavioAvatar  from "@/assets/avatars/chico-orcamento-v3.webp";
+import lucasAvatar   from "@/assets/avatars/neto-agenda-v3.webp";
+import helenaAvatar  from "@/assets/avatars/dona-conta-v3.webp";
+import mayaAvatar    from "@/assets/avatars/zeca-instagram-v3.webp";
+
 // ─── Dados ────────────────────────────────────────────────────────────────────
 
 const PRICE_PER_AGENT = 29;
 
 interface AgentOption {
-  id:          string;
-  name:        string;
-  role:        string;
-  color:       string;
-  initial:     string;
-  description: string;
+  id:      string;
+  name:    string;
+  role:    string;
+  color:   string;
+  avatar:  string;
 }
 
 const AGENT_OPTIONS: AgentOption[] = [
-  {
-    id:          "clara",
-    name:        "Clara",
-    role:        "Atendimento",
-    color:       "#25D366",
-    initial:     "C",
-    description: "Responde, qualifica e salva o lead 24h",
-  },
-  {
-    id:          "otavio",
-    name:        "Otávio",
-    role:        "Orçamento",
-    color:       "#8B5CF6",
-    initial:     "O",
-    description: "Cotação estruturada com fornecedores",
-  },
-  {
-    id:          "lucas",
-    name:        "Lucas",
-    role:        "Agenda",
-    color:       "#3B82F6",
-    initial:     "L",
-    description: "Organiza visitas no Google Calendar",
-  },
-  {
-    id:          "helena",
-    name:        "Helena",
-    role:        "Financeiro",
-    color:       "#F59E0B",
-    initial:     "H",
-    description: "Controla margem e lucro do projeto",
-  },
-  {
-    id:          "maya",
-    name:        "Maya",
-    role:        "Divulgação",
-    color:       "#F97316",
-    initial:     "M",
-    description: "Cria copy e hashtags para Instagram",
-  },
+  { id: "clara",  name: "Clara",  role: "Atendimento", color: "#25D366", avatar: claraAvatar  },
+  { id: "otavio", name: "Otávio", role: "Orçamento",   color: "#8B5CF6", avatar: otavioAvatar },
+  { id: "lucas",  name: "Lucas",  role: "Agenda",      color: "#3B82F6", avatar: lucasAvatar  },
+  { id: "helena", name: "Helena", role: "Financeiro",  color: "#F59E0B", avatar: helenaAvatar },
+  { id: "maya",   name: "Maya",   role: "Divulgação",  color: "#F97316", avatar: mayaAvatar   },
 ] as const;
 
 interface MicroFeature {
@@ -67,16 +37,16 @@ interface MicroFeature {
 }
 
 const MICRO_FEATURES: MicroFeature[] = [
-  { Icon: Lock,       text: "Sem fidelidade"              },
-  { Icon: Smartphone, text: "Tudo funciona no WhatsApp"   },
-  { Icon: Mic,        text: "Aceita áudio e texto"         },
+  { Icon: Lock,       text: "Sem fidelidade"                },
+  { Icon: Smartphone, text: "Tudo funciona no WhatsApp"     },
+  { Icon: Mic,        text: "Aceita áudio e texto"           },
   { Icon: RefreshCw,  text: "Troque de agente quando quiser" },
 ] as const;
 
 // ─── Componente ───────────────────────────────────────────────────────────────
 
 /**
- * PricingSection — seletor interativo de agentes a R$29/agente/mês.
+ * PricingSection — seletor interativo de agentes a R$29/agente/mês com fotos reais.
  */
 export function PricingSection() {
   const [selected, setSelected] = useState<Set<string>>(new Set(["clara"]));
@@ -143,39 +113,51 @@ export function PricingSection() {
                     transition={{ delay: index * 0.06 }}
                     onClick={() => toggle(agent.id)}
                     className={cn(
-                      "relative rounded-xl border-2 p-4 text-left transition-all duration-150 cursor-pointer",
+                      "relative rounded-xl border-2 p-0 text-left transition-all duration-150 cursor-pointer overflow-hidden flex flex-col",
                       isSelected
                         ? "border-black shadow-[4px_4px_0_#000] -translate-x-[2px] -translate-y-[2px]"
                         : "border-border/60 bg-card hover:border-black hover:shadow-[2px_2px_0_#000]"
                     )}
-                    style={isSelected ? { background: agent.color + "22" } : {}}
                     aria-pressed={isSelected}
                   >
-                    {/* Checkbox */}
-                    <div
-                      className={cn(
-                        "absolute top-3 right-3 w-5 h-5 rounded-full border-2 flex items-center justify-center",
-                        isSelected ? "border-black bg-white" : "border-border bg-white"
-                      )}
-                    >
+                    {/* Foto do agente */}
+                    <div className="relative w-full aspect-[3/2] overflow-hidden">
+                      <img
+                        src={agent.avatar}
+                        alt={agent.name}
+                        className="w-full h-full object-cover object-top transition-transform duration-300 group-hover:scale-105"
+                      />
+                      {/* Overlay colorido quando selecionado */}
                       {isSelected && (
-                        <Check className="w-3 h-3" style={{ color: agent.color }} aria-hidden="true" />
+                        <div
+                          className="absolute inset-0 opacity-20"
+                          style={{ background: agent.color }}
+                        />
                       )}
+                      {/* Checkbox */}
+                      <div
+                        className={cn(
+                          "absolute top-2 right-2 w-6 h-6 rounded-full border-2 flex items-center justify-center shadow-sm",
+                          isSelected ? "border-black bg-white" : "border-white/80 bg-white/60"
+                        )}
+                      >
+                        {isSelected && (
+                          <Check className="w-3.5 h-3.5" style={{ color: agent.color }} aria-hidden="true" />
+                        )}
+                      </div>
                     </div>
 
-                    {/* Avatar */}
-                    <div
-                      className="w-10 h-10 rounded-full border-2 border-black flex items-center justify-center mb-3 shadow-[2px_2px_0_#000]"
-                      style={{ background: agent.color }}
-                    >
-                      <span className="font-black text-base text-white">{agent.initial}</span>
+                    {/* Info */}
+                    <div className="p-3 flex-1 flex flex-col gap-1">
+                      <p className="font-semibold text-sm text-foreground leading-tight">{agent.name}</p>
+                      <p className="text-xs text-muted-foreground">{agent.role}</p>
+                      <p
+                        className="text-xs font-bold mt-auto pt-1"
+                        style={{ color: agent.color }}
+                      >
+                        R$ 29,00/mês
+                      </p>
                     </div>
-
-                    <p className="font-semibold text-sm text-foreground">{agent.name}</p>
-                    <p className="text-xs text-muted-foreground mt-0.5">{agent.role}</p>
-                    <p className="text-xs font-bold mt-2 text-foreground/70">
-                      R$ 29,00/mês
-                    </p>
                   </motion.button>
                 );
               })}

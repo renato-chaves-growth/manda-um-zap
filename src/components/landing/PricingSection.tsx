@@ -1,13 +1,19 @@
 import { useState } from "react";
 
+import claraAvatar   from "@/assets/avatars/ze-atendimento-v3.webp";
+import otavioAvatar  from "@/assets/avatars/chico-orcamento-v3.webp";
+import lucasAvatar   from "@/assets/avatars/neto-agenda-v3.webp";
+import helenaAvatar  from "@/assets/avatars/dona-conta-v3.webp";
+import mayaAvatar    from "@/assets/avatars/zeca-instagram-v3.webp";
+
 const WHATSAPP_LINK = "https://wa.me/5500000000000?text=Olá! Quero começar com o MandaUmZap";
 
 const agents = [
-  { id: "clara",  name: "Clara",  role: "Atendimento", color: "#25D366", initial: "C" },
-  { id: "otavio", name: "Otávio", role: "Orçamento",   color: "#8B5CF6", initial: "O" },
-  { id: "lucas",  name: "Lucas",  role: "Agenda",       color: "#3B82F6", initial: "L" },
-  { id: "helena", name: "Helena", role: "Financeiro",   color: "#F59E0B", initial: "H" },
-  { id: "maya",   name: "Maya",   role: "Divulgação",   color: "#F97316", initial: "M" },
+  { id: "clara",  name: "Clara",  role: "Atendimento", color: "#25D366", avatar: claraAvatar  },
+  { id: "otavio", name: "Otávio", role: "Orçamento",   color: "#8B5CF6", avatar: otavioAvatar },
+  { id: "lucas",  name: "Lucas",  role: "Agenda",      color: "#3B82F6", avatar: lucasAvatar  },
+  { id: "helena", name: "Helena", role: "Financeiro",  color: "#F59E0B", avatar: helenaAvatar },
+  { id: "maya",   name: "Maya",   role: "Divulgação",  color: "#F97316", avatar: mayaAvatar   },
 ];
 
 const PRICE_PER_AGENT = 29.00;
@@ -52,57 +58,60 @@ export function PricingSection() {
             Selecione os agentes que você quer ativar:
           </p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-5 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
             {agents.map((agent) => {
               const isSelected = selected.has(agent.id);
               return (
                 <button
                   key={agent.id}
                   onClick={() => toggle(agent.id)}
-                  className={`relative rounded-xl border-2 p-4 text-left transition-all duration-150 cursor-pointer ${
+                  className={`relative rounded-xl border-2 text-left transition-all duration-150 cursor-pointer overflow-hidden flex flex-col ${
                     isSelected
                       ? "border-black shadow-[4px_4px_0_#000] -translate-x-[2px] -translate-y-[2px]"
                       : "border-gray-300 bg-white hover:border-black hover:shadow-[2px_2px_0_#000]"
                   }`}
-                  style={isSelected ? { background: agent.color } : {}}
                 >
-                  {/* Checkbox indicator */}
-                  <div
-                    className={`absolute top-3 right-3 w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                      isSelected ? "border-black bg-white" : "border-gray-300 bg-white"
-                    }`}
-                  >
+                  {/* Foto do agente */}
+                  <div className="relative w-full aspect-[3/2] overflow-hidden">
+                    <img
+                      src={agent.avatar}
+                      alt={agent.name}
+                      className="w-full h-full object-cover object-top"
+                    />
+                    {/* Overlay colorido quando selecionado */}
                     {isSelected && (
-                      <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
-                        <path d="M2 6l3 3 5-5" stroke={agent.color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
+                      <div
+                        className="absolute inset-0 opacity-30"
+                        style={{ background: agent.color }}
+                      />
                     )}
-                  </div>
-
-                  {/* Avatar */}
-                  <div
-                    className={`w-10 h-10 rounded-full border-2 border-black flex items-center justify-center mb-3 shadow-[2px_2px_0_#000] ${
-                      isSelected ? "bg-white" : ""
-                    }`}
-                    style={!isSelected ? { background: agent.color } : {}}
-                  >
-                    <span
-                      className="font-black text-base"
-                      style={{ color: isSelected ? agent.color : "white" }}
+                    {/* Checkbox indicator */}
+                    <div
+                      className={`absolute top-2 right-2 w-5 h-5 rounded-full border-2 flex items-center justify-center shadow-sm ${
+                        isSelected ? "border-black bg-white" : "border-white/80 bg-white/60"
+                      }`}
                     >
-                      {agent.initial}
-                    </span>
+                      {isSelected && (
+                        <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
+                          <path d="M2 6l3 3 5-5" stroke={agent.color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      )}
+                    </div>
                   </div>
 
-                  <p className={`font-display font-black text-base ${isSelected ? "text-black" : "text-black"}`}>
-                    {agent.name}
-                  </p>
-                  <p className={`font-sans text-xs mt-0.5 ${isSelected ? "text-black/70" : "text-gray-500"}`}>
-                    {agent.role}
-                  </p>
-                  <p className={`font-sans text-xs font-bold mt-2 ${isSelected ? "text-black" : "text-gray-400"}`}>
-                    R$ 29,00/mês
-                  </p>
+                  {/* Info */}
+                  <div className="p-3 flex flex-col gap-0.5">
+                    <p className="font-display font-black text-sm text-black leading-tight">
+                      {agent.name}
+                    </p>
+                    <p className="font-sans text-xs text-gray-500">{agent.role}</p>
+                    <p
+                      className="font-sans text-xs font-bold mt-1"
+                      style={{ color: agent.color }}
+                    >
+                      R$ 29,00/mês
+                    </p>
+                  </div>
                 </button>
               );
             })}
