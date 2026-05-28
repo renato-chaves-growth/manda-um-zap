@@ -1,6 +1,5 @@
 import {
   HeroSection,
-  HowItWorksSection,
   PainSolutionSection,
   ConceptSection,
   AgentShowcaseSection,
@@ -17,7 +16,6 @@ const Index = () => {
   return (
     <main className="flex-1">
       <HeroSection />
-      <HowItWorksSection />
       <PainSolutionSection />
       <ConceptSection />
       <AgentShowcaseSection />
