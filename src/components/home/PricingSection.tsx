@@ -178,7 +178,7 @@ export function PricingSection() {
                 </p>
               </div>
 
-              <Link to="/carrinho" className="w-full sm:w-auto">
+              <Link to={`/carrinho?agentes=${[...selected].join(",")}`} className="w-full sm:w-auto">
                 <Button size="lg" className="w-full gap-2 rounded-full shadow-[5px_5px_0_#000] hover:shadow-none hover:translate-x-[5px] hover:translate-y-[5px] transition-all duration-150">
                   Começar com {selected.size} agente{selected.size !== 1 ? "s" : ""}
                 </Button>
