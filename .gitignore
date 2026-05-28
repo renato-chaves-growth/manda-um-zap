@@ -30,3 +30,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+.vercel
+
+# Dev logs e arquivos temporários
+dev-log.txt
+supabase/.temp/
