@@ -344,18 +344,18 @@ export function HeroSection() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
-                className="font-sans text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-semibold text-foreground leading-[1.15] tracking-tighter"
+                className="font-sans text-3xl md:text-4xl lg:text-4xl xl:text-4xl font-semibold text-foreground leading-[1.15] tracking-tighter whitespace-nowrap"
               >
                 Sua prestação de serviços
               </motion.h1>
 
               {/* Área fixa para a frase digitada */}
-              <div className="h-[88px] md:h-[104px] lg:h-[140px] flex items-start justify-center lg:justify-start">
+              <div className="h-[72px] md:h-[84px] lg:h-[96px] flex items-start justify-center lg:justify-start">
                 <motion.p
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.6, delay: 0.2 }}
-                  className="font-sans text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-semibold leading-[1.15] tracking-tighter text-foreground"
+                  className="font-sans text-3xl md:text-4xl lg:text-4xl xl:text-4xl font-semibold leading-[1.15] tracking-tighter text-foreground"
                   aria-live="polite"
                   aria-atomic="true"
                 >
