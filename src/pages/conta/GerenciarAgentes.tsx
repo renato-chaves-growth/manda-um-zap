@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
-import { Loader2, ChevronRight, ChevronLeft, MessageCircle, Settings, TrendingUp, Calendar, Instagram } from "lucide-react";
+import { Loader2, ChevronRight, ChevronLeft, MessageCircle, Settings, TrendingUp, Calendar, Instagram, ShoppingCart, PartyPopper } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/lib/supabase";
 import { useToast } from "@/hooks/use-toast";
@@ -79,10 +80,24 @@ interface AgentRow {
 export default function GerenciarAgentes() {
   const { user } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [agents, setAgents] = useState<AgentRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState<string | null>(null);
   const [selectedAgent, setSelectedAgent] = useState<string | null>(null);
+
+  // Toast de sucesso após pagamento
+  useEffect(() => {
+    if (searchParams.get("pagamento") === "sucesso") {
+      toast({
+        title: "🎉 Pagamento realizado!",
+        description: "Seus agentes foram ativados e já estão prontos para trabalhar.",
+      });
+      // Remove o query param sem recarregar a página
+      navigate("/minha-conta/agentes", { replace: true });
+    }
+  }, [searchParams, toast, navigate]);
 
   useEffect(() => {
     if (!user) return;
@@ -184,40 +199,98 @@ export default function GerenciarAgentes() {
     );
   }
 
+  const activeCount = agents.filter((a) => a.active).length;
+  const inactiveIds = agents.filter((a) => !a.active).map((a) => a.agent_id);
+
   return (
     <div>
-      <div className="mb-6">
-        <h2 className="text-xl font-bold text-foreground">Seus Agentes</h2>
-        <p className="text-sm text-muted-foreground">Gerencie e configure sua equipe de IA</p>
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h2 className="text-xl font-bold text-foreground">Seus Agentes</h2>
+          <p className="text-sm text-muted-foreground">
+            {activeCount > 0
+              ? `${activeCount} agente${activeCount > 1 ? "s" : ""} ativo${activeCount > 1 ? "s" : ""}`
+              : "Nenhum agente ativo ainda"}
+          </p>
+        </div>
+        {inactiveIds.length > 0 && (
+          <Button
+            size="sm"
+            className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90 rounded-full shadow-[3px_3px_0px_#000] border border-black"
+            onClick={() => navigate(`/carrinho?agentes=${inactiveIds.join(",")}`)}
+          >
+            <ShoppingCart className="w-4 h-4" />
+            Ativar mais agentes
+          </Button>
+        )}
       </div>
+
       <div className="space-y-3">
         {agents.map((row) => {
           const meta = AGENT_META[row.agent_id];
           if (!meta) return null;
           const RoleIcon = roleIcons[meta.role] || Settings;
           return (
-            <Card key={row.agent_id} className={`cursor-pointer transition-all hover:shadow-md ${!row.active ? "opacity-60" : ""}`} onClick={() => setSelectedAgent(row.agent_id)}>
+            <Card
+              key={row.agent_id}
+              className={`transition-all hover:shadow-md ${row.active ? "cursor-pointer" : "border-dashed"}`}
+              onClick={() => row.active && setSelectedAgent(row.agent_id)}
+            >
               <CardContent className="p-4">
                 <div className="flex items-center gap-4">
                   <div className="relative shrink-0">
-                    <img src={meta.avatar} alt={meta.name} className="w-14 h-14 rounded-xl object-cover object-top" />
+                    <img
+                      src={meta.avatar}
+                      alt={meta.name}
+                      className={`w-14 h-14 rounded-xl object-cover object-top ${!row.active ? "grayscale opacity-50" : ""}`}
+                    />
                     {row.active && <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-background" />}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <h3 className={`font-semibold ${meta.color}`}>{meta.name}</h3>
+                      <h3 className={`font-semibold ${row.active ? meta.color : "text-muted-foreground"}`}>{meta.name}</h3>
                       <Badge variant="outline" className="text-[10px]"><RoleIcon className="w-3 h-3 mr-1" />{meta.role}</Badge>
                       {saving === row.agent_id && <Loader2 className="w-3 h-3 animate-spin text-muted-foreground" />}
                     </div>
                     <p className="text-sm text-muted-foreground truncate">{meta.description}</p>
                   </div>
-                  <ChevronRight className="w-5 h-5 text-muted-foreground shrink-0" />
+                  {row.active ? (
+                    <ChevronRight className="w-5 h-5 text-muted-foreground shrink-0" />
+                  ) : (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="shrink-0 gap-1 text-xs border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(`/carrinho?agentes=${row.agent_id}`);
+                      }}
+                    >
+                      <ShoppingCart className="w-3 h-3" />
+                      R$29,90/mês
+                    </Button>
+                  )}
                 </div>
               </CardContent>
             </Card>
           );
         })}
       </div>
+
+      {activeCount === 0 && (
+        <div className="mt-6 p-6 rounded-2xl border-2 border-dashed border-border text-center">
+          <PartyPopper className="w-10 h-10 mx-auto mb-3 text-muted-foreground/50" />
+          <p className="font-medium text-foreground mb-1">Nenhum agente ativo</p>
+          <p className="text-sm text-muted-foreground mb-4">Escolha os agentes que vão trabalhar para você 24h pelo WhatsApp.</p>
+          <Button
+            onClick={() => navigate("/carrinho")}
+            className="gap-2 bg-primary text-primary-foreground rounded-full shadow-[3px_3px_0px_#000] border border-black"
+          >
+            <ShoppingCart className="w-4 h-4" />
+            Ver agentes disponíveis
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

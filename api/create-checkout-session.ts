@@ -66,7 +66,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         agent_ids: agentIds.join(","),
         ciclo,
       },
-      success_url: `${APP_URL}/minha-conta?pagamento=sucesso`,
+      success_url: `${APP_URL}/minha-conta/agentes?pagamento=sucesso`,
       cancel_url:  `${APP_URL}/carrinho?agentes=${agentIds.join(",")}`,
     });
 

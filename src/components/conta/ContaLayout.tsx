@@ -18,6 +18,7 @@ const navItems = [
 
 const planLabels: Record<string, string> = {
   free: "Grátis",
+  paid: "Pro",
   pro: "Pro",
   // legado
   comecar: "Começar", trabalhar: "Trabalhar",
