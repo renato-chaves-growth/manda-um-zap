@@ -350,12 +350,12 @@ export function HeroSection() {
               </motion.h1>
 
               {/* Área fixa para a frase digitada */}
-              <div className="h-[72px] md:h-[84px] lg:h-[96px] flex items-start justify-center lg:justify-start">
+              <div className="h-[120px] md:h-[128px] lg:h-[128px] flex items-start justify-center lg:justify-start">
                 <motion.p
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.6, delay: 0.2 }}
-                  className="font-sans text-3xl md:text-4xl lg:text-4xl xl:text-4xl font-semibold leading-[1.15] tracking-tighter text-foreground"
+                  className="font-sans text-4xl md:text-5xl lg:text-5xl xl:text-5xl font-semibold leading-tight tracking-tighter text-foreground"
                   aria-live="polite"
                   aria-atomic="true"
                 >
