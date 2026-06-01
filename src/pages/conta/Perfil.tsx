@@ -361,7 +361,7 @@ export default function Perfil() {
             <div className="p-3 rounded-lg bg-muted/50 border border-border">
               <p className="text-xs font-medium text-foreground mb-1">URL do Webhook (copie para a Z-API):</p>
               <p className="text-xs text-muted-foreground font-mono break-all select-all">
-                https://yuidyidxswoqtcricsvk.supabase.co/functions/v1/whatsapp-webhook
+                https://ppopzfpgzfifywgagcpu.supabase.co/functions/v1/whatsapp-webhook
               </p>
             </div>
 
