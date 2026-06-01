@@ -31,6 +31,8 @@ import GuidePage from "./pages/GuidePage";
 import Cases from "./pages/Cases";
 import CasePage from "./pages/CasePage";
 import NotFound from "./pages/NotFound";
+import Landing from "./pages/Landing";
+import PreviewAgentsPage from "./pages/PreviewAgents";
 import Marketplace from "./pages/Marketplace";
 import Termos from "./pages/Termos";
 import Privacidade from "./pages/Privacidade";
@@ -122,6 +124,8 @@ const App = () => (
               </Route>
             </Route>
             <Route path="/marketplace" element={<Marketplace />} />
+            <Route path="/landing" element={<Landing />} />
+            <Route path="/preview-agents" element={<PreviewAgentsPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
